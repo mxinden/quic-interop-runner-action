@@ -14,5 +14,5 @@ runs:
   using: "composite"
   steps:
     - name: Set Greeting
-      run: echo "Image name: ${{ inputs.image-name }}"
+      run: 'echo "Image name: ${{ inputs.image-name }}"'
       shell: bash
