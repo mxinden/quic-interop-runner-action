@@ -96,7 +96,7 @@ runs:
         CRON: "true"
       run: |
         cd quic-interop-runner
-        echo '{"neqo": {"image": "${{ input.image-name }}", "url": "https://github.com/mozilla/neqo", "role": "both"}}' > implementations.json
+        echo '{"neqo": {"image": "${{ inputs.image-name }}", "url": "https://github.com/mozilla/neqo", "role": "both"}}' > implementations.json
         cat implementations.json
         python run.py -t onlyTests
       shell: bash
