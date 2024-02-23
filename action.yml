@@ -1,0 +1,20 @@
+name: 'QUIC Interop Runner Action'
+description: ''
+author: 'mxinden'
+branding:
+  icon: 'anchor'
+  color: 'blue'
+
+inputs:
+  image-name:
+    description: ''
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Set Greeting
+      run: echo "Image name: $IMAGE_NAME"
+      shell: bash
+      env:
+        IMAGE_NAME: ${{ inputs.image-name }}
