@@ -69,6 +69,10 @@ runs:
     - run: run/tshark -v
       shell: bash
       if: steps.restore-cache.outputs.cache-hit != 'true'
+    - name: Install Wireshark
+      run: |
+        sudo mv run/tshark /usr/local/bin
+      shell: bash
 
     # Run tests
     - uses: actions/checkout@v3
@@ -79,40 +83,6 @@ runs:
       run: sudo modprobe ip6table_filter
       shell: bash
     - run: docker image ls
-      shell: bash
-    - name: Download tools Docker images
-      uses: actions/download-artifact@v3
-      with:
-        name: images-tools
-    - name: Download ${{ matrix.server }} Docker image
-      uses: actions/download-artifact@v3
-      with:
-        name: image-${{ matrix.server }}
-    - name: Download ${{ matrix.client }} Docker image
-      if: ${{ matrix.server != matrix.client }}
-      uses: actions/download-artifact@v3
-      with:
-        name: image-${{ matrix.client }}
-    - name: Load docker images
-      run: |
-        docker load --input quic-network-simulator.tar.gz
-        docker load --input quic-interop-iperf-endpoint.tar.gz
-        docker load --input ${{ matrix.server }}.tar.gz
-        docker load --input ${{ matrix.client }}.tar.gz
-      shell: bash
-    - run: docker image ls
-      shell: bash
-    - name: Download Wireshark
-      uses: actions/download-artifact@v3
-      with:
-        name: wireshark
-        path: wireshark
-    - name: Install Wireshark
-      run: |
-        cd wireshark
-        tar xfz tshark.tar.gz
-        sudo mv tshark /usr/local/bin
-        cd .. && rm -r wireshark
       shell: bash
     - name: Install Python packages
       run: |
