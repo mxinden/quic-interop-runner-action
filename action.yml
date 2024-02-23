@@ -67,6 +67,7 @@ runs:
         ninja
       shell: bash
     - run: run/tshark -v
+      shell: bash
       if: steps.restore-cache.outputs.cache-hit != 'true'
 
     # Run tests
