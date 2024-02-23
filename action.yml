@@ -20,12 +20,6 @@ env:
 runs:
   using: "composite"
   steps:
-    - name: Checkout quic-interop/quic-interop-runner repository
-      uses: actions/checkout@v2
-      with:
-        repository: 'quic-interop/quic-interop-runner'
-        path: 'quic-interop-runner'
-
     # Wireshark
     - name: Restore from cache
       id: restore-cache
@@ -84,9 +78,13 @@ runs:
       shell: bash
     - run: docker image ls
       shell: bash
+    - name: Checkout quic-interop/quic-interop-runner repository
+      uses: actions/checkout@v2
+      with:
+        repository: 'quic-interop/quic-interop-runner'
+        path: 'quic-interop-runner'
     - name: Install Python packages
       run: |
-        cd quic-interop-runner
         pip install -U pip
         pip install -r requirements.txt
       shell: bash
@@ -94,7 +92,6 @@ runs:
       env:
         CRON: "true"
       run: |
-        cd quic-interop-runner
         (python run.py --client ${{ matrix.client }} --server ${{ matrix.server }} --log-dir logs --json ${{ matrix.server }}_${{ matrix.client }}_results.json -t onlyTests || true) | tee output.txt
         mkdir -p logs/${{ matrix.server }}_${{ matrix.client }}
         mv output.txt logs/${{ matrix.server }}_${{ matrix.client }}/
