@@ -22,5 +22,7 @@ runs:
       run: pip3 install -r quic-interop-runner/requirements.txt
       shell: bash
     - name: Run the interop runner
-      run: python3 quic-interop-runner/run.py
+      run: |
+        cd quic-interop-runner
+        python3 run.py
       shell: bash
