@@ -40,6 +40,7 @@ runs:
       run: |
         tar xfz tshark.tar.gz
         ./tshark -v
+      shell: bash
     - uses: actions/checkout@v3
       if: steps.restore-cache.outputs.cache-hit != 'true'
       with:
@@ -50,6 +51,7 @@ runs:
         ./autogen.sh
         ./configure --disable-dbus --disable-rdma
         sudo make install
+      shell: bash
     - uses: actions/checkout@v3
       if: steps.restore-cache.outputs.cache-hit != 'true'
       with:
@@ -57,11 +59,13 @@ runs:
     - name: Install dependencies
       if: steps.restore-cache.outputs.cache-hit != 'true'
       run: sudo apt-get install -y cmake libglib2.0-dev libc-ares-dev libgcrypt20-dev flex bison byacc ninja-build
+      shell: bash
     - name: Build Wireshark
       if: steps.restore-cache.outputs.cache-hit != 'true'
       run: |
         cmake -GNinja -DBUILD_wireshark=0 -DBUILD_qtshark=0 -DBUILD_editcap=0 -DBUILD_capinfos=0 -DBUILD_text2pcap=0 -DBUILD_rawshark=0 -DBUILD_sdjournal=0 -DBUILD_sshdump=0 -DBUILD_ciscodump=0 -DBUILD_sharkd=0 -DENABLE_STATIC=1 -DENABLE_PLUGINS=0 -DENABLE_LIBXML2=0 -DENABLE_BROTLI=0 -DUSE_STATIC=1 -DENABLE_GNUTLS=1 .
         ninja
+      shell: bash
     - run: run/tshark -v
       if: steps.restore-cache.outputs.cache-hit != 'true'
 
@@ -72,7 +76,9 @@ runs:
         python-version: 3.8
     - name: Enable IPv6 support
       run: sudo modprobe ip6table_filter
+      shell: bash
     - run: docker image ls
+      shell: bash
     - name: Download tools Docker images
       uses: actions/download-artifact@v3
       with:
@@ -92,7 +98,9 @@ runs:
         docker load --input quic-interop-iperf-endpoint.tar.gz
         docker load --input ${{ matrix.server }}.tar.gz
         docker load --input ${{ matrix.client }}.tar.gz
+      shell: bash
     - run: docker image ls
+      shell: bash
     - name: Download Wireshark
       uses: actions/download-artifact@v3
       with:
@@ -104,10 +112,12 @@ runs:
         tar xfz tshark.tar.gz
         sudo mv tshark /usr/local/bin
         cd .. && rm -r wireshark
+      shell: bash
     - name: Install Python packages
       run: |
         pip install -U pip
         pip install -r requirements.txt
+      shell: bash
     - name: Run tests
       env:
         CRON: "true"
@@ -115,3 +125,4 @@ runs:
         (python run.py --client ${{ matrix.client }} --server ${{ matrix.server }} --log-dir logs --json ${{ matrix.server }}_${{ matrix.client }}_results.json -t onlyTests || true) | tee output.txt
         mkdir -p logs/${{ matrix.server }}_${{ matrix.client }}
         mv output.txt logs/${{ matrix.server }}_${{ matrix.client }}/
+      shell: bash
