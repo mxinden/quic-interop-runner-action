@@ -17,11 +17,10 @@ runs:
       uses: actions/checkout@v2
       with:
         repository: 'quic-interop/quic-interop-runner'
-        token: ${{ secrets.GITHUB_TOKEN }}
         path: 'quic-interop-runner'
     - name: Install dependencies
       run: pip3 install -r quic-interop-runner/requirements.txt
       shell: bash
     - name: Run the interop runner
       run: python3 quic-interop-runner/run.py
-      shell: bash     shell: bash
+      shell: bash
