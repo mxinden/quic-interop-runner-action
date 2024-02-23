@@ -86,6 +86,7 @@ runs:
       shell: bash
     - name: Install Python packages
       run: |
+        cd quic-interop-runner
         pip install -U pip
         pip install -r requirements.txt
       shell: bash
@@ -93,6 +94,7 @@ runs:
       env:
         CRON: "true"
       run: |
+        cd quic-interop-runner
         (python run.py --client ${{ matrix.client }} --server ${{ matrix.server }} --log-dir logs --json ${{ matrix.server }}_${{ matrix.client }}_results.json -t onlyTests || true) | tee output.txt
         mkdir -p logs/${{ matrix.server }}_${{ matrix.client }}
         mv output.txt logs/${{ matrix.server }}_${{ matrix.client }}/
