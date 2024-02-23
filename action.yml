@@ -96,7 +96,7 @@ runs:
         CRON: "true"
       run: |
         cd quic-interop-runner
-        (python run.py --client ${{ matrix.client }} --server ${{ matrix.server }} --log-dir logs --json ${{ matrix.server }}_${{ matrix.client }}_results.json -t onlyTests || true) | tee output.txt
-        mkdir -p logs/${{ matrix.server }}_${{ matrix.client }}
-        mv output.txt logs/${{ matrix.server }}_${{ matrix.client }}/
+        echo '{"neqo": {"image": "{{ input.image-name }}", "url": "https://github.com/mozilla/neqo", "role": "both"}}' > implementations.json
+        cat implementations.json
+        python run.py -t onlyTests
       shell: bash
