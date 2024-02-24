@@ -48,7 +48,6 @@ runs:
         echo '{"neqo": {"image": "${{ inputs.image-name }}", "url": "https://github.com/mozilla/neqo", "role": "both"}}' > implementations.json
         cat implementations.json
         python run.py --test handshake --log-dir output 2>&1 | tee result
-        echo "::set-output name=result::$(cat result)"
       shell: bash
     - uses: actions/upload-artifact@v4
       id: artifact-upload-step
@@ -56,11 +55,13 @@ runs:
       with:
         name: output
         path: quic-interop-runner/output
+    - run: |
+        echo '\n You can download the output at ${{ steps.artifact-upload-step.outputs.artifact-url }}' >> quic-interop-runner/result
+      if: always()
+      shell: bash
     - name: Comment PR
       if: github.event_name == 'pull_request'
       uses: thollander/actions-comment-pull-request@v2
       with:
-        message: |
-          ${{ steps.test-run.outputs.result }}
-
-          You can download the output at ${{ steps.artifact-upload-step.outputs.artifact-url }}
+        filePath: quic-interop-runner/result
+          
