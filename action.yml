@@ -60,11 +60,11 @@ runs:
         echo '[**QUIC Interop Runner**](https://github.com/quic-interop/quic-interop-runner)' >> tmp
         echo '' >> tmp
         echo '```' >> tmp
-        cat quic-interop-runner/output >> tmp
+        cat quic-interop-runner/github-comment >> tmp
         echo '```' >> tmp
         echo '' >> tmp
         echo 'Download artifacts [here](${{ steps.artifact-upload-step.outputs.artifact-url }})' >> tmp
-        mv tmp quic-interop-runner/output
+        mv tmp quic-interop-runner/github-comment
       if: always()
       shell: bash
     - name: Comment PR
