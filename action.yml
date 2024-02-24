@@ -45,7 +45,7 @@ runs:
         cd quic-interop-runner
         echo '{"neqo": {"image": "${{ inputs.image-name }}", "url": "https://github.com/mozilla/neqo", "role": "both"}}' > implementations.json
         cat implementations.json
-        python run.py -t onlyTests -d
+        python run.py -t onlyTests
       shell: bash
     - name: Comment PR
       uses: thollander/actions-comment-pull-request@v2
