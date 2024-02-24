@@ -6,9 +6,19 @@ branding:
   color: 'blue'
 
 inputs:
-  local-image:
-    description: 'Name of the local Docker image to be tested.'
+  name:
+    description: 'Name of the QUIC implementation'
     required: true
+  image:
+    description: 'Docker image to be tested. Needs to reside either locally, or on some registry.'
+    required: true
+  url:
+    description: 'URL of the QUIC implementation'
+    required: true
+  role:
+    description: 'client/server/both'
+    required: false
+    default: 'both'
 
 runs:
   using: "composite"
@@ -45,7 +55,7 @@ runs:
       id: test-run
       run: |
         cd quic-interop-runner
-        echo '{"neqo": {"image": "${{ inputs.local-image }}", "url": "https://github.com/mozilla/neqo", "role": "both"}}' > implementations.json
+        echo '{"neqo": {"image": "${{ inputs.image }}", "url": "${{ inputs.name }}", "role": "${{ inputs.role }}"}}' > implementations.json
         cat implementations.json
         python run.py --test handshake --log-dir output 2>&1 | tee github-comment
       shell: bash

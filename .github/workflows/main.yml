@@ -12,4 +12,6 @@ jobs:
       - id: foo
         uses: ./
         with:
-          local-image: 'ghcr.io/mozilla/neqo-qns:latest'
+          name: 'neqo'
+          image: 'ghcr.io/mozilla/neqo-qns:latest'
+          url: https://github.com/mozilla/neqo
