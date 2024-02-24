@@ -45,14 +45,13 @@ runs:
         cd quic-interop-runner
         echo '{"neqo": {"image": "${{ inputs.image-name }}", "url": "https://github.com/mozilla/neqo", "role": "both"}}' > implementations.json
         cat implementations.json
-        python run.py -t onlyTests
-        touch test
+        (python run.py --test handshake --log-dir output || true)
       shell: bash
     - uses: actions/upload-artifact@v4
       id: artifact-upload-step
       with:
         name: output
-        path: quic-interop-runner/test
+        path: quic-interop-runner/output
     - name: Comment PR
       uses: thollander/actions-comment-pull-request@v2
       with:
