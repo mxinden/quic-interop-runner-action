@@ -47,7 +47,7 @@ runs:
         cd quic-interop-runner
         echo '{"neqo": {"image": "${{ inputs.image-name }}", "url": "https://github.com/mozilla/neqo", "role": "both"}}' > implementations.json
         cat implementations.json
-        python run.py --test handshake --log-dir output 2>&1 | tee result
+        python run.py --test handshake --log-dir output 2>&1 | tee github-comment
       shell: bash
     - uses: actions/upload-artifact@v4
       id: artifact-upload-step
@@ -55,13 +55,21 @@ runs:
       with:
         name: output
         path: quic-interop-runner/output
-    - run: |
-        echo '\n You can download the output at ${{ steps.artifact-upload-step.outputs.artifact-url }}' >> quic-interop-runner/result
+    - name: Format GitHub comment
+      run: |
+        echo '**QUIC Interop Runner**' >> tmp
+        echo '' >> tmp
+        echo '```' >> tmp
+        cat quic-interop-runner/output >> tmp
+        echo '```' >> tmp
+        echo '' >> tmp
+        echo 'Download artifacts at ${{ steps.artifact-upload-step.outputs.artifact-url }}' >> quic-interop-runner/github-comment
+        mv tmp quic-interop-runner/output
       if: always()
       shell: bash
     - name: Comment PR
       if: github.event_name == 'pull_request'
       uses: thollander/actions-comment-pull-request@v2
       with:
-        filePath: quic-interop-runner/result
+        filePath: quic-interop-runner/github-comment
           
