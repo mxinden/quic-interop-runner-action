@@ -63,7 +63,7 @@ runs:
         cat quic-interop-runner/github-comment >> tmp
         echo '```' >> tmp
         echo '' >> tmp
-        echo 'Download artifacts [here](${{ steps.artifact-upload-step.outputs.artifact-url }})' >> tmp
+        echo 'Download artifacts [here](${{ steps.artifact-upload-step.outputs.artifact-url }}).' >> tmp
         mv tmp quic-interop-runner/github-comment
       if: always()
       shell: bash
