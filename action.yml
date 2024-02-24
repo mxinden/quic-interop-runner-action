@@ -14,7 +14,10 @@ runs:
   using: "composite"
   steps:
     - name: Install dependencies
-      run: sudo apt-get install -y wireshark tshark
+      run: |
+        sudo add-apt-repository ppa:wireshark-dev/stable
+        sudo apt-get update
+        sudo apt-get install -y wireshark tshark
       shell: bash
     - uses: actions/checkout@v3
     - uses: actions/setup-python@v4
