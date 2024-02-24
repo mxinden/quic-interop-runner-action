@@ -12,4 +12,4 @@ jobs:
       - id: foo
         uses: ./
         with:
-          image-name: 'ghcr.io/mozilla/neqo-qns:latest'
+          local-image: 'ghcr.io/mozilla/neqo-qns:latest'

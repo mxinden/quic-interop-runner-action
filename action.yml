@@ -6,8 +6,8 @@ branding:
   color: 'blue'
 
 inputs:
-  image-name:
-    description: ''
+  local-image:
+    description: 'Name of the local Docker image to be tested.'
     required: true
 
 runs:
@@ -45,7 +45,7 @@ runs:
       id: test-run
       run: |
         cd quic-interop-runner
-        echo '{"neqo": {"image": "${{ inputs.image-name }}", "url": "https://github.com/mozilla/neqo", "role": "both"}}' > implementations.json
+        echo '{"neqo": {"image": "${{ inputs.local-image }}", "url": "https://github.com/mozilla/neqo", "role": "both"}}' > implementations.json
         cat implementations.json
         python run.py --test handshake --log-dir output 2>&1 | tee github-comment
       shell: bash
