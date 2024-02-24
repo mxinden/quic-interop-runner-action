@@ -6,6 +6,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - id: foo
-        uses: ./action.yml
+        uses: ./
         with:
           image-name: 'ghcr.io/mozilla/neqo-qns:latest'
