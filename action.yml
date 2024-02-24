@@ -42,11 +42,13 @@ runs:
         pip install -r requirements.txt
       shell: bash
     - name: Run tests
+      id: test-run
       run: |
         cd quic-interop-runner
         echo '{"neqo": {"image": "${{ inputs.image-name }}", "url": "https://github.com/mozilla/neqo", "role": "both"}}' > implementations.json
         cat implementations.json
-        python run.py --test handshake --log-dir output
+        python run.py --test handshake --log-dir output | tee result
+        echo "::set-output name=result::$(cat result)"
       shell: bash
     - uses: actions/upload-artifact@v4
       id: artifact-upload-step
@@ -58,4 +60,6 @@ runs:
       uses: thollander/actions-comment-pull-request@v2
       with:
         message: |
-          Artifact URL is ${{ steps.artifact-upload-step.outputs.artifact-url }}
+          ${{ steps.test-run.outputs.result }}
+
+          You can download the output at ${{ steps.artifact-upload-step.outputs.artifact-url }}
