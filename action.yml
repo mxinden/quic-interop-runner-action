@@ -63,7 +63,7 @@ runs:
         cat quic-interop-runner/output >> tmp
         echo '```' >> tmp
         echo '' >> tmp
-        echo 'Download artifacts at ${{ steps.artifact-upload-step.outputs.artifact-url }}' >> tmp
+        echo 'Download artifacts [here](${{ steps.artifact-upload-step.outputs.artifact-url }})' >> tmp
         mv tmp quic-interop-runner/output
       if: always()
       shell: bash
