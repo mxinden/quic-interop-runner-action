@@ -57,7 +57,7 @@ runs:
         path: quic-interop-runner/output
     - name: Format GitHub comment
       run: |
-        echo '**QUIC Interop Runner**' >> tmp
+        echo '[**QUIC Interop Runner**](https://github.com/quic-interop/quic-interop-runner)' >> tmp
         echo '' >> tmp
         echo '```' >> tmp
         cat quic-interop-runner/output >> tmp
