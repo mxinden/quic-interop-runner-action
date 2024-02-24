@@ -47,3 +47,8 @@ runs:
         cat implementations.json
         python run.py -t onlyTests -d
       shell: bash
+    - name: Comment PR
+      uses: thollander/actions-comment-pull-request@v2
+      with:
+        message: |
+          Hello world ! :wave:
