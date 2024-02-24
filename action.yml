@@ -63,7 +63,7 @@ runs:
         cat quic-interop-runner/output >> tmp
         echo '```' >> tmp
         echo '' >> tmp
-        echo 'Download artifacts at ${{ steps.artifact-upload-step.outputs.artifact-url }}' >> quic-interop-runner/github-comment
+        echo 'Download artifacts at ${{ steps.artifact-upload-step.outputs.artifact-url }}' >> tmp
         mv tmp quic-interop-runner/output
       if: always()
       shell: bash
@@ -72,4 +72,3 @@ runs:
       uses: thollander/actions-comment-pull-request@v2
       with:
         filePath: quic-interop-runner/github-comment
-          
