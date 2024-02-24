@@ -6,6 +6,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - id: foo
-        uses: mxinden/quic-interop-runner-action@main
+        uses: ./action.yml
         with:
           image-name: 'ghcr.io/mozilla/neqo-qns:latest'
