@@ -1,3 +1,5 @@
+name: quic-interop-runner
+
 on:
   pull_request:
   push:

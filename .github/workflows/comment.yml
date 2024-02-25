@@ -1,0 +1,49 @@
+name: Comment on the pull request
+
+# read-write repo token
+# access to secrets
+on:
+  workflow_run:
+    workflows: ["quic-interop-runner"]
+    types:
+      - completed
+
+jobs:
+  upload:
+    runs-on: ubuntu-latest
+    if: >
+      github.event.workflow_run.event == 'pull_request'
+    steps:
+      - name: Download comment-data
+        uses: dawidd6/action-download-artifact@v2.11.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          workflow: main.yml
+          run_id: ${{ github.event.workflow_run.id }}
+          name: comment-data
+
+      - name: Format GitHub comment
+        run: |
+          echo '[**QUIC Interop Runner**](https://github.com/quic-interop/quic-interop-runner)' >> comment
+          echo '' >> comment
+          echo '```' >> comment
+          cat comment-data/output >> comment
+          echo '```' >> comment
+          echo '' >> comment
+          echo 'Download artifacts [here](' >> comment
+          cat comment-data/logs-url >> comment
+          echo ').' >> comment
+        if: always()
+        shell: bash
+
+      - name: Read PR Number
+        id: pr-number
+        run: echo "::set-output name=number::$(cat comment-data/pr-number)"
+        shell: bash
+
+      - name: Comment PR
+        if: github.event_name == 'pull_request'
+        uses: thollander/actions-comment-pull-request@v2
+        with:
+          filePath: comment
+          pr_number: ${{ steps.pr-number.outputs.number }}
