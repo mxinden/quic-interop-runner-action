@@ -27,18 +27,18 @@ jobs:
           echo '[**QUIC Interop Runner**](https://github.com/quic-interop/quic-interop-runner)' >> comment
           echo '' >> comment
           echo '```' >> comment
-          cat comment-data/output >> comment
+          cat output >> comment
           echo '```' >> comment
           echo '' >> comment
           echo 'Download artifacts [here](' >> comment
-          cat comment-data/logs-url >> comment
+          cat logs-url >> comment
           echo ').' >> comment
         if: always()
         shell: bash
 
       - name: Read PR Number
         id: pr-number
-        run: echo "::set-output name=number::$(cat comment-data/pr-number)"
+        run: echo "::set-output name=number::$(cat pr-number)"
         shell: bash
 
       - name: Comment PR
