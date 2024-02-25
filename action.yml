@@ -73,7 +73,7 @@ runs:
       run: |
         mkdir comment-data
         echo $PULL_REQUEST_NUMBER > comment-data/pr-number
-        echo '${{ steps.artifact-upload-step.logs.artifact-url }}' > comment-data/logs-url
+        echo '${{ steps.artifact-upload-step.outputs.artifact-url }}' > comment-data/logs-url
 
     - name: Upload comment data
       uses: actions/upload-artifact@v2
