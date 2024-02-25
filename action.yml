@@ -6,24 +6,34 @@ branding:
   color: 'blue'
 
 inputs:
-  image-name:
-    description: ''
+  name:
+    description: 'Name of the QUIC implementation'
     required: true
+  image:
+    description: 'Docker image to be tested. Needs to reside either locally, or on some registry.'
+    required: true
+  url:
+    description: 'URL of the QUIC implementation'
+    required: true
+  role:
+    description: 'client/server/both'
+    required: false
+    default: 'both'
 
 runs:
   using: "composite"
   steps:
     - name: Install dependencies
-      run: sudo apt-get install -y wireshark tshark
+      run: |
+        sudo add-apt-repository ppa:wireshark-dev/stable
+        sudo apt-get update
+        sudo apt-get install -y wireshark tshark
       shell: bash
-    - uses: actions/checkout@v3
     - uses: actions/setup-python@v4
       with:
         python-version: 3.8
     - name: Enable IPv6 support
       run: sudo modprobe ip6table_filter
-      shell: bash
-    - run: docker image ls
       shell: bash
     - name: Checkout quic-interop/quic-interop-runner repository
       uses: actions/checkout@v2
@@ -38,12 +48,36 @@ runs:
         pip install -U pip
         pip install -r requirements.txt
       shell: bash
+    - run: docker image ls
+      shell: bash
     - name: Run tests
-      env:
-        CRON: "true"
+      id: test-run
       run: |
         cd quic-interop-runner
-        echo '{"neqo": {"image": "${{ inputs.image-name }}", "url": "https://github.com/mozilla/neqo", "role": "both"}}' > implementations.json
+        echo '{"neqo": {"image": "${{ inputs.image }}", "url": "${{ inputs.name }}", "role": "${{ inputs.role }}"}}' > implementations.json
         cat implementations.json
-        python run.py -t onlyTests -d
+        python run.py --test handshake --log-dir logs 2>&1 | tee output
       shell: bash
+    - uses: actions/upload-artifact@v4
+      id: artifact-upload-step
+      if: always()
+      with:
+        name: logs
+        path: quic-interop-runner/logs
+
+    - name: store comment-data
+      shell: bash
+      if: github.event_name == 'pull_request'
+      env:
+        PULL_REQUEST_NUMBER: ${{ github.event.number }}
+      run: |
+        mkdir comment-data
+        echo $PULL_REQUEST_NUMBER > comment-data/pr-number
+        echo '${{ steps.artifact-upload-step.outputs.artifact-url }}' > comment-data/logs-url
+
+    - name: Upload comment data
+      uses: actions/upload-artifact@v2
+      if: github.event_name == 'pull_request'
+      with:
+        name: comment-data
+        path: ./comment-data
