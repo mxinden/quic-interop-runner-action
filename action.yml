@@ -72,6 +72,7 @@ runs:
         PULL_REQUEST_NUMBER: ${{ github.event.number }}
       run: |
         mkdir comment-data
+        mv quic-interop-runner/output comment-data/output
         echo $PULL_REQUEST_NUMBER > comment-data/pr-number
         echo '${{ steps.artifact-upload-step.outputs.artifact-url }}' > comment-data/logs-url
 
