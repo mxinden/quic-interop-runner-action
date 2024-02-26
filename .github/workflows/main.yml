@@ -8,6 +8,7 @@ jobs:
   main:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
 
       # Build your Docker image.
 
