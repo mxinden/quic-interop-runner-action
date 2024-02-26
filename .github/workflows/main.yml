@@ -2,7 +2,7 @@ name: quic-interop-runner
 
 on:
   pull_request:
-  push:
+  workflow_dispatch:
 
 jobs:
   main:
