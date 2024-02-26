@@ -1,7 +1,11 @@
+# Post test results as pull request comment.
+#
+# This is done as a separate workflow as it requires write permissions. The
+# tests itself might run off of a fork, i.e. an untrusted environment and should
+# thus not be granted write permissions.
+
 name: Comment on the pull request
 
-# read-write repo token
-# access to secrets
 on:
   workflow_run:
     workflows: ["quic-interop-runner"]
@@ -31,7 +35,7 @@ jobs:
           echo '[**QUIC Interop Runner**](https://github.com/quic-interop/quic-interop-runner)' >> comment
           echo '' >> comment
           echo '```' >> comment
-          cat output >> comment
+          cat summary >> comment
           echo '```' >> comment
           echo '' >> comment
           echo 'Download artifacts [here](' >> comment
