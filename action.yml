@@ -1,4 +1,5 @@
 name: 'QUIC Interop Runner Action'
+description: 'Run the QUIC Interop Runner tests.'
 author: 'mxinden'
 
 inputs:
