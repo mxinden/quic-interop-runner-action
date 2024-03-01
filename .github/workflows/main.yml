@@ -15,7 +15,10 @@ jobs:
       - name: Run QUIC Interop tests
         uses: ./
         with:
-          name: 'neqo'
+          name: 'neqo-latest'
           # Replace with the name of the freshly-build local docker image.
           image: 'ghcr.io/mozilla/neqo-qns:latest'
           url: https://github.com/mozilla/neqo
+          test: handshake
+          client: neqo-latest,quic-go,ngtcp2,neqo,msquic
+          server: neqo-latest,quic-go,ngtcp2,neqo,msquic
