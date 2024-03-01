@@ -25,6 +25,7 @@ jobs:
         with:
           run_id: ${{ github.event.workflow_run.id }}
           name: comment-data
+          github_token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Format GitHub comment
         run: |
